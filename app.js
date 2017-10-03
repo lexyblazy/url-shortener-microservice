@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
@@ -13,10 +13,10 @@ const Url = mongoose.model('Url',urlSchema);
 
 app.use(express.static(__dirname + '/public'));
 
-const db = 'mongodb://user:user@ds161194.mlab.com:61194/site-shortener';
-const localDB= '127.0.0.1:27017/url-shortener';
+process.env.DATABASE = 'mongodb://user:user@ds161194.mlab.com:61194/site-shortener';
 
-mongoose.connect(db,(err)=>{
+
+mongoose.connect(process.env.DATABASE,(err)=>{
     if(err){
         console.log(err)
     }else{
@@ -37,13 +37,13 @@ app.get('/new/:url*',async (req,res)=>{
             original_url:url,
             short_url:"https://" + req.headers.host +"/"+ generateLink()
         };
-        res.send(result);
         const site = new Url({
             shortUrl:result.short_url,
             longUrl:result.original_url
         });
 
         await site.save();
+        res.send(result);
     }else{
         res.send({"error":"Invalid URL"})
     }   
@@ -55,7 +55,7 @@ app.get('/:number',async (req,res)=>{
     res.redirect(url.longUrl);
 })
 
-app.listen(port,process.env.IP,()=>{
+app.listen(8000,()=>{
     console.log('server is up and running');
 })
 
