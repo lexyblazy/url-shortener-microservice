@@ -13,8 +13,6 @@ const Url = mongoose.model('Url',urlSchema);
 
 app.use(express.static(__dirname + '/public'));
 
-process.env.DATABASE = 'mongodb://user:user@ds161194.mlab.com:61194/site-shortener';
-
 
 mongoose.connect(process.env.DATABASE,(err)=>{
     if(err){
@@ -55,7 +53,7 @@ app.get('/:number',async (req,res)=>{
     res.redirect(url.longUrl);
 })
 
-app.listen(8000,()=>{
+app.listen(port,()=>{
     console.log('server is up and running');
 })
 
